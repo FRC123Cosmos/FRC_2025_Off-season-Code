@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.185641025641026,
+        "y": 4.190128205128206
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.156403427149285,
+        "y": 4.073899201420719
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.653892045454545,
+        "y": 4.020014204545454
+      },
+      "prevControl": {
+        "x": 6.60572606167819,
+        "y": 4.1374626142439
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "ejectAlgae",
+      "waypointRelativePos": 0.09745293466223322,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 179.19307054489755
+  },
+  "reversed": false,
+  "folder": "Center",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 179.4743653935424
+  },
+  "useDefaultConstraints": true
+}
