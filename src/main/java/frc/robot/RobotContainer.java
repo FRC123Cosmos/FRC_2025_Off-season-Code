@@ -107,7 +107,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("notHaveCoral", new WaitUntilCommand(scorer::notHasCoral));
     NamedCommands.registerCommand("pulseCoral", new PulseScorerCommand(scorer));
     NamedCommands.registerCommand("alignLeft", new AlignToTagCommand(robotDrive, vision, -0.18));
-    NamedCommands.registerCommand("alignRight", new AlignToTagCommand(robotDrive, vision, 0.155));//0.195
+    NamedCommands.registerCommand("alignRight", new AlignToTagCommand(robotDrive, vision, 0.195));//0.195
     NamedCommands.registerCommand("alignCenter", new AlignToTagCommand(robotDrive, vision));
 
     new EventTrigger("pulseCoral").onTrue(new WaitUntilCommand(elevator::atHeight).andThen(

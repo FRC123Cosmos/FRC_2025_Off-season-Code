@@ -332,7 +332,7 @@ public class AlignToTagCommand extends Command {
     private final PIDController yController;    // only strafe
     private final PIDController xController;
 
-    private final double positionTolerance = 0.01; // Meters (5 cm)
+    private final double positionTolerance = 0.05; // Meters (5 cm)
     private double targetOffsetY;        // desired static position from center of target
     private double targetOffsetX; 
     private double targetSetpointY;      // setpoint fed to PID
@@ -346,22 +346,22 @@ public class AlignToTagCommand extends Command {
     private double ySpeed;          // clipped PID control output
     private double xSpeed; 
     
-        public AlignToTagCommand(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem) {
-            this(driveSubsystem, visionSubsystem, 0.0);
-            targetOffsetX = 0.33;
-        }
-    
-        public AlignToTagCommand(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem, double targetOffsetY) {
-            this.driveSubsystem = driveSubsystem;
-            this.visionSubsystem = visionSubsystem;
-            this.targetOffsetY = targetOffsetY;
-            targetOffsetX = 0.33;
+    public AlignToTagCommand(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem) {
+        this(driveSubsystem, visionSubsystem, 0.0);
+        targetOffsetX = 0.33;
+    }
 
-            this.yController = new PIDController(1.0, 0, 0.0);
-            this.xController = new PIDController(1.0, 0, 0.0);
-            yController.setTolerance(positionTolerance);
+    public AlignToTagCommand(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem, double targetOffsetY) {
+        this.driveSubsystem = driveSubsystem;
+        this.visionSubsystem = visionSubsystem;
+        this.targetOffsetY = targetOffsetY;
+        targetOffsetX = 0.33;
 
-            addRequirements(driveSubsystem, visionSubsystem);
+        this.yController = new PIDController(1.0, 0, 0.0);
+        this.xController = new PIDController(1.0, 0, 0.0);
+        yController.setTolerance(positionTolerance);
+
+        addRequirements(driveSubsystem, visionSubsystem);
     }
 
     @Override
@@ -396,8 +396,8 @@ public class AlignToTagCommand extends Command {
             targetErrorY = yController.getError();
             targetErrorX = xController.getError();
 
-            ySpeed = Math.max(-0.2, Math.min(0.2, pidOutY)); // Meters/sec
-            xSpeed = Math.max(-0.2, Math.min(0.2, pidOutX));
+            ySpeed = Math.max(-0.3, Math.min(0.3, pidOutY)); // Meters/sec
+            xSpeed = Math.max(-0.3, Math.min(0.3, pidOutX));
 
             driveSubsystem.drive(-xSpeed, -ySpeed, 0, false, true);    // try kinematic rate limit??
 
