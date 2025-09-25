@@ -162,7 +162,7 @@ public class DriveSubsystem extends SubsystemBase {
         // field.setRobotPose(est_Odometry.getEstimatedPosition());    
         
         SmartDashboard.putString("odometry", odometry.getPoseMeters().toString());
-        SmartDashboard.putNumber("gyro angle", gyro.getAngle());
+        SmartDashboard.putNumber("gyro angle", -gyro.getAngle()); // ADDED A NEGATIVE
 
         // SmartDashboard.putString("est odometry", est_Odometry.getEstimatedPosition().toString());
     }
@@ -337,7 +337,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // returns robot's heading in degrees (reading from gyro)
     public double getHeading() {
-        return Rotation2d.fromDegrees(gyro.getAngle(/*IMUAxis.kZ */)).getDegrees();
+        return Rotation2d.fromDegrees(-gyro.getAngle(/*IMUAxis.kZ */)).getDegrees(); // ADDED Negative
     }
 
     public double getTurnState() {

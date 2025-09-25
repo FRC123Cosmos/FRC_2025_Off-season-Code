@@ -91,7 +91,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("notHaveCoral", new WaitUntilCommand(scorer::notHasCoral));
     NamedCommands.registerCommand("pulseCoral", new PulseScorerCommand(scorer));
     NamedCommands.registerCommand("alignLeft", new AlignToTagCommand(robotDrive, vision, -0.18, .33));
-    NamedCommands.registerCommand("alignRight", new AlignToTagCommand(robotDrive, vision, 0.195, 0.33));//0.195
+    NamedCommands.registerCommand("alignRight", new AlignToTagCommand(robotDrive, vision, 0.195, .33));//0.195
     NamedCommands.registerCommand("alignCenter", new AlignToTagCommand(robotDrive, vision));
 
     new EventTrigger("pulseCoral").onTrue(new WaitUntilCommand(elevator::atHeight).andThen(
@@ -208,8 +208,8 @@ public class RobotContainer {
     // driverControllerCommand.a().whileTrue(new RunCommand(() -> robotDrive.setX()));
     driverControllerCommand.y().whileTrue(new RunCommand(() -> robotDrive.setX()));
     driverControllerCommand.start().onTrue(new InstantCommand(() -> robotDrive.zeroHeading(), robotDrive));
-    driverControllerCommand.leftBumper().whileTrue(new AlignToTagCommand(robotDrive, vision, -0.18, 0.33));
-    driverControllerCommand.rightBumper().whileTrue(new AlignToTagCommand(robotDrive, vision, 0.195, 0.33));
+    driverControllerCommand.leftBumper().whileTrue(new AlignToTagCommand(robotDrive, vision, -0.18, .33));
+    driverControllerCommand.rightBumper().whileTrue(new AlignToTagCommand(robotDrive, vision, 0.195, .33));
 
     // coPilotSecondControllerCommand.button(9).whileTrue(new StartEndCommand(() -> winch.openTrap(), () -> winch.stopTrap()));
     // coPilotSecondControllerCommand.button(10).whileTrue(new StartEndCommand(() -> winch.closeTrap(), () -> winch.stopTrap()));

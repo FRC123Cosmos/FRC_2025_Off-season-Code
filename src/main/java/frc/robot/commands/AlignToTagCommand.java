@@ -30,14 +30,14 @@ import frc.robot.subsystems.VisionSubsystem;
     
 //     public AlignToTagCommand(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem) {
 //         this(driveSubsystem, visionSubsystem, 0.0);
-//         targetOffsetX = 0.33;
+//         targetOffsetX = 0.34;
 //     }
 
 //     public AlignToTagCommand(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem, double targetOffsetY) {
 //         this.driveSubsystem = driveSubsystem;
 //         this.visionSubsystem = visionSubsystem;
 //         this.targetOffsetY = targetOffsetY;
-//         targetOffsetX = 0.33;
+//         targetOffsetX = 0.34;
 
 //         this.yController = new PIDController(1.0, 0, 0.0);
 //         this.xController = new PIDController(1.0, 0, 0.0);
@@ -79,8 +79,8 @@ import frc.robot.subsystems.VisionSubsystem;
 //             targetErrorY = yController.getError();
 //             targetErrorX = xController.getError();
 
-//             ySpeed = Math.max(-0.3, Math.min(0.3, pidOutY)); // Meters/sec
-//             xSpeed = Math.max(-0.3, Math.min(0.3, pidOutX));
+//             ySpeed = Math.max(-0.25, Math.min(0.25, pidOutY)); // Meters/sec
+//             xSpeed = Math.max(-0.25, Math.min(0.25, pidOutX));
 
 //             driveSubsystem.drive(-xSpeed, -ySpeed, 0, false, true);    // try kinematic rate limit??
 
@@ -262,7 +262,7 @@ import frc.robot.subsystems.VisionSubsystem;
 // }
 
 
-/* ---------------------------- Version 1.0 (Refactor) ---------------------------- */
+/* ---------------------------- Version 1.0 (Refactored) ---------------------------- */
 
 public class AlignToTagCommand extends Command {
     private final DriveSubsystem driveSubsystem;
@@ -308,14 +308,13 @@ public class AlignToTagCommand extends Command {
         this.targetOffsetY = targetOffsetY;
         this.targetOffsetX = targetOffsetX;
 
-        // Proportional-only to start; tune Kp/Kd as needed
         this.yController = new PIDController(1.0, 0.0, 0.0);
         this.xController = new PIDController(1.0, 0.0, 0.0);
-        this.thetaController = new PIDController(0.02, 0.0, 0.001); // example yaw gains
+        this.thetaController = new PIDController(0.02, 0.0, 0.001);
 
         yController.setTolerance(positionTolerance);
         xController.setTolerance(positionTolerance);
-        thetaController.setTolerance(2.0); // degrees tolerance
+        thetaController.setTolerance(.50); // degrees tolerance
         thetaController.enableContinuousInput(-180.0, 180.0);
 
         addRequirements(driveSubsystem, visionSubsystem);
@@ -343,8 +342,8 @@ public class AlignToTagCommand extends Command {
     public void execute() {
         if (visionSubsystem.hasTarget()) {
             // Read vision values in robot frame
-            targetY = visionSubsystem.getTargetY();
-            targetX = visionSubsystem.getTargetX();
+            targetY = visionSubsystem.getTarget_y();
+            targetX = visionSubsystem.getTarget_x();
 
             // Calculate PID outputs
             pidOutY = yController.calculate(targetY, targetSetpointY);
@@ -357,9 +356,9 @@ public class AlignToTagCommand extends Command {
             xSpeed = applySpeedShaping(pidOutX, targetErrorX);
 
             // Control rotation to face tag
-            double currentYaw = visionSubsystem.getTargetRawYaw(); // degrees
+            double currentYaw = visionSubsystem.getTarget_rawYaw(); // degrees
             thetaOut = thetaController.calculate(currentYaw, targetYaw);
-            thetaOut = Math.max(-0.4, Math.min(0.4, thetaOut)); // cap rotation output
+            thetaOut = Math.max(-0.2, Math.min(0.2, thetaOut)); // cap rotation output
 
             // Drive command: (x forward, y strafe, rot, fieldRelative, rateLimit)
             driveSubsystem.drive(-xSpeed, -ySpeed, thetaOut, false, true);
