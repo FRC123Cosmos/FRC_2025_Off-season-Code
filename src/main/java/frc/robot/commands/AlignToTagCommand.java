@@ -268,23 +268,18 @@ public class AlignToTagCommand extends Command {
     private final DriveSubsystem driveSubsystem;
     private final VisionSubsystem visionSubsystem;
 
-    // Controllers for strafe (Y) and forward (X)
     private final PIDController yController;
     private final PIDController xController;
-    // Optional: yaw controller for rotation
     private final PIDController thetaController;
 
-    // Tunables
     private final double positionTolerance = 0.05; // meters (5 cm)
     private final double maxSpeed = 0.3;           // m/s speed cap
     private final double minEffectiveSpeed = 0.06; // m/s to overcome friction/stiction
 
-    // Desired offsets from the tag
     private final double targetOffsetY;   // lateral offset (m)
     private final double targetOffsetX;   // forward distance from tag (m)
     private final double targetYaw = 0.0; // desired facing angle relative to tag (deg)
 
-    // State variables
     private double targetSetpointY;
     private double targetSetpointX;
     private double targetY;
@@ -341,30 +336,24 @@ public class AlignToTagCommand extends Command {
     @Override
     public void execute() {
         if (visionSubsystem.hasTarget()) {
-            // Read vision values in robot frame
             targetY = visionSubsystem.getTarget_y();
             targetX = visionSubsystem.getTarget_x();
 
-            // Calculate PID outputs
             pidOutY = yController.calculate(targetY, targetSetpointY);
             pidOutX = xController.calculate(targetX, targetSetpointX);
             targetErrorY = yController.getError();
             targetErrorX = xController.getError();
 
-            // Apply deadband + min effective speed + clipping
             ySpeed = applySpeedShaping(pidOutY, targetErrorY);
             xSpeed = applySpeedShaping(pidOutX, targetErrorX);
 
-            // Control rotation to face tag
             double currentYaw = visionSubsystem.getTarget_rawYaw(); // degrees
             thetaOut = thetaController.calculate(currentYaw, targetYaw);
             thetaOut = Math.max(-0.2, Math.min(0.2, thetaOut)); // cap rotation output
 
-            // Drive command: (x forward, y strafe, rot, fieldRelative, rateLimit)
             driveSubsystem.drive(-xSpeed, -ySpeed, thetaOut, false, true);
 
         } else {
-            // No target: stop
             pidOutY = pidOutX = 0.0;
             ySpeed = xSpeed = 0.0;
             thetaOut = 0.0;
@@ -375,7 +364,6 @@ public class AlignToTagCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        // Stop when at both setpoints or if no target
         return !visionSubsystem.hasTarget() ||
                (yController.atSetpoint() && xController.atSetpoint() && thetaController.atSetpoint());
     }
