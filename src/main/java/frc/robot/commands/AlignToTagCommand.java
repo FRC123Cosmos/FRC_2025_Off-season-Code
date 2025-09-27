@@ -57,8 +57,8 @@ public class AlignToTagCommand extends Command {
         this.maxSpeedMultiplier = maxSpeedMultiplier;
         this.targetOffsetX = 0.34;
 
-        this.yController = new PIDController(.90, 0, 1e-4);
-        this.xController = new PIDController(.90, 0, 1e-4);
+        this.yController = new PIDController(.90, 0, 1e-5);
+        this.xController = new PIDController(.90, 0, 1e-5);
         xController.setTolerance(positionTolerance);
         yController.setTolerance(positionTolerance);
 

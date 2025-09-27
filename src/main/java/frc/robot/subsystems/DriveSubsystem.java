@@ -99,7 +99,7 @@ public class DriveSubsystem extends SubsystemBase {
                     kBRight.getPosition()
             });
     
-      // Odometry class for tracking robot pose
+    // Odometry class for tracking robot pose
     // SwerveDrivePoseEstimator est_Odometry = new SwerveDrivePoseEstimator(
     //   DriveConstants.kDriveKinematics,
     //   gyro.getRotation2d(),
@@ -163,7 +163,7 @@ public class DriveSubsystem extends SubsystemBase {
         // field.setRobotPose(est_Odometry.getEstimatedPosition());    
         
         SmartDashboard.putString("odometry", odometry.getPoseMeters().toString());
-        SmartDashboard.putNumber("gyro angle", -gyro.getAngle()); // ADDED A NEGATIVE
+        SmartDashboard.putNumber("gyro angle", gyro.getAngle()); // ADDED A NEGATIVE
         
         field.setRobotPose(odometry.getPoseMeters());
         // SmartDashboard.putString("est odometry", est_Odometry.getEstimatedPosition().toString());

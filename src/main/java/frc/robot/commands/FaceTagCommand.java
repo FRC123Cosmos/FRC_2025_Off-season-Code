@@ -32,6 +32,7 @@ public class FaceTagCommand extends Command {
         this.targetOffsetTheta = targetOffsetTheta;
 
         this.thetaController = new PIDController(1, 0.0, 0.0);
+        thetaController.enableContinuousInput(-180,180);
         thetaController.setTolerance(angleTolerance);
 
         addRequirements(driveSubsystem, visionSubsystem);
@@ -42,7 +43,7 @@ public class FaceTagCommand extends Command {
         thetaController.reset();
         targetErrorTheta = 0.0;
         pidOutTheta = 0.0;
-        targetSetpointTheta = 25;
+        targetSetpointTheta = 0;
         thetaSpeed = 0.0;
     }
 
@@ -50,7 +51,6 @@ public class FaceTagCommand extends Command {
     public void execute() {
         if (visionSubsystem.hasTarget()) {
 
-            targetSetpointTheta = targetSetpointTheta;
             targetTheta = VisionSubsystem.getTarget_rawYaw();
             pidOutTheta = thetaController.calculate(targetTheta, targetSetpointTheta);
             targetErrorTheta = thetaController.getError();
@@ -58,7 +58,7 @@ public class FaceTagCommand extends Command {
             thetaSpeed = Math.max(-.1, Math.min(.1, pidOutTheta)); // degrees/sec
 
 
-            driveSubsystem.drive(0, 0, -thetaSpeed, false, true);    // try fieldrelative true?
+            driveSubsystem.drive(0, 0, thetaSpeed, false, true);    // try fieldrelative true?
 
         } else {
             pidOutTheta = 0.0;
