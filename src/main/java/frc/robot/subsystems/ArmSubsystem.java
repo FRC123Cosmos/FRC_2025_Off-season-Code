@@ -35,8 +35,6 @@ public class ArmSubsystem extends SubsystemBase{
 
 
     public ArmSubsystem(){
-        CommandScheduler.getInstance().registerSubsystem(this);
-
         armMax = new SparkMax(ArmConstants.kArmMotorCANID, SparkMax.MotorType.kBrushless);
         rollerMax = new SparkMax(ArmConstants.kArmRollerMotorCANID, SparkMax.MotorType.kBrushless);
 

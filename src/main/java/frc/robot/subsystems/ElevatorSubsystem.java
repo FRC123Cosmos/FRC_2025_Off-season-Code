@@ -36,7 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private Double targetPosition = 1.25;
     
     public ElevatorSubsystem(){
-        CommandScheduler.getInstance().registerSubsystem(this);
+        // CommandScheduler.getInstance().registerSubsystem(this);
 
         leadElevatorMax = new SparkMax(ElevatorConstants.kLeadElevatorMotorCANID, MotorType.kBrushless);
         followElevatorMax = new SparkMax(ElevatorConstants.kFollowElevatorMotorCANID, MotorType.kBrushless);

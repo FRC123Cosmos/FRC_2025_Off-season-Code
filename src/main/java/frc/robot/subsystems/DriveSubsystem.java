@@ -74,6 +74,7 @@ public class DriveSubsystem extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
     );
+    SmartDashboard.putData("Field", field);
 
     }
     // movement variables
@@ -163,7 +164,8 @@ public class DriveSubsystem extends SubsystemBase {
         
         SmartDashboard.putString("odometry", odometry.getPoseMeters().toString());
         SmartDashboard.putNumber("gyro angle", -gyro.getAngle()); // ADDED A NEGATIVE
-
+        
+        field.setRobotPose(odometry.getPoseMeters());
         // SmartDashboard.putString("est odometry", est_Odometry.getEstimatedPosition().toString());
     }
 

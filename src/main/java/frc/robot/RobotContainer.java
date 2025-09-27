@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
@@ -67,14 +68,12 @@ public class RobotContainer {
 
   private final XboxController copilotController = new XboxController(OIConstants.kCoPilotControllerPort);
 
-  private final SendableChooser<Command> autoChooser;
-
-  private final SendableChooser<AutoPos> autoPosition;
+  private SendableChooser<Command> autoChooser;
+  private SendableChooser<AutoPos> autoPosition;
+  private SendableChooser<Double> autoDelayChooser;
 
   private final Pose2d leftAlign = new Pose2d(-0.17, 0.0, Rotation2d.fromDegrees(0));
   private final Pose2d rightAlign = new Pose2d(0.17, 0.0, Rotation2d.fromDegrees(0));
-
-  private double autoDelay;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -90,8 +89,8 @@ public class RobotContainer {
     
     NamedCommands.registerCommand("notHaveCoral", new WaitUntilCommand(scorer::notHasCoral));
     NamedCommands.registerCommand("pulseCoral", new PulseScorerCommand(scorer));
-    NamedCommands.registerCommand("alignLeft", new AlignToTagCommand(robotDrive, vision, -0.18, .33));
-    NamedCommands.registerCommand("alignRight", new AlignToTagCommand(robotDrive, vision, 0.195, .33));//0.195
+    NamedCommands.registerCommand("alignLeft", new AlignToTagCommand(robotDrive, vision, -0.18, 0.4));
+    NamedCommands.registerCommand("alignRight", new AlignToTagCommand(robotDrive, vision, 0.4));//0.195
     NamedCommands.registerCommand("alignCenter", new AlignToTagCommand(robotDrive, vision));
 
     new EventTrigger("pulseCoral").onTrue(new WaitUntilCommand(elevator::atHeight).andThen(
@@ -195,7 +194,14 @@ public class RobotContainer {
 
     autoChooser = AutoBuilder.buildAutoChooser("Center_1CV3");
     SmartDashboard.putData("Auto Mode", autoChooser);
-    autoDelay = SmartDashboard.getNumber("Auto Delay", 0);
+
+    autoDelayChooser.setDefaultOption("No Delay", 0.0);
+    autoDelayChooser.addOption("1 Second Delay", 1.0);
+    autoDelayChooser.addOption("2 Second Delay", 2.0);
+    autoDelayChooser.addOption("3 Second Delay", 3.0);
+    autoDelayChooser.addOption("4 Second Delay", 4.0);
+
+    SmartDashboard.putData("Auto Delay Time", autoDelayChooser);
   }
 
   
@@ -208,8 +214,8 @@ public class RobotContainer {
     // driverControllerCommand.a().whileTrue(new RunCommand(() -> robotDrive.setX()));
     driverControllerCommand.y().whileTrue(new RunCommand(() -> robotDrive.setX()));
     driverControllerCommand.start().onTrue(new InstantCommand(() -> robotDrive.zeroHeading(), robotDrive));
-    driverControllerCommand.leftBumper().whileTrue(new AlignToTagCommand(robotDrive, vision, -0.18, .33));
-    driverControllerCommand.rightBumper().whileTrue(new AlignToTagCommand(robotDrive, vision, 0.195, .33));
+    driverControllerCommand.leftBumper().whileTrue(new AlignToTagCommand(robotDrive, vision, -0.18));
+    driverControllerCommand.rightBumper().whileTrue(new AlignToTagCommand(robotDrive, vision, 0.195));
 
     // coPilotSecondControllerCommand.button(9).whileTrue(new StartEndCommand(() -> winch.openTrap(), () -> winch.stopTrap()));
     // coPilotSecondControllerCommand.button(10).whileTrue(new StartEndCommand(() -> winch.closeTrap(), () -> winch.stopTrap()));
@@ -326,6 +332,7 @@ public class RobotContainer {
   // }
 
   public Command getAutonomousCommand() {
+    double autoDelay = autoDelayChooser.getSelected();
 
     robotDrive.zeroHeading();
     if (autoPosition.getSelected() == AutoPos.Center) {
@@ -339,8 +346,8 @@ public class RobotContainer {
     }
     return new WaitCommand(autoDelay).andThen(autoChooser.getSelected());
   }
-
-
+    
+  
   public enum AutoPos{
     Left, Center, Right
   }

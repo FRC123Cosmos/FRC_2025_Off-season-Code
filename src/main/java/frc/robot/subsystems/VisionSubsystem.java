@@ -46,8 +46,6 @@ public class VisionSubsystem extends SubsystemBase {
     
     
     public VisionSubsystem() {
-        CommandScheduler.getInstance().registerSubsystem(this);
-        
         camera = new PhotonCamera(cameraName);
         latestResult = new PhotonPipelineResult();
         cameraOffset = new Translation2d(VisionConstants.cameraXOffset, VisionConstants.cameraYOffset);

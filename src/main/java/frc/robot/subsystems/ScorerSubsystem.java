@@ -37,7 +37,7 @@ public class ScorerSubsystem extends SubsystemBase{
 
 
     public ScorerSubsystem(){
-        CommandScheduler.getInstance().registerSubsystem(this);
+        // CommandScheduler.getInstance().registerSubsystem(this);
         scorerRightMax = new SparkMax(ScorerConstants.kScorerRightMotorCANID, MotorType.kBrushless);
         scorerLeftMax = new SparkMax(ScorerConstants.kScorerLeftMotorCANID, MotorType.kBrushless);
 
